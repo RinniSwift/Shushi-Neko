@@ -9,14 +9,19 @@
 import SpriteKit
 
 class Character: SKSpriteNode {
+    
+    let punch = SKAction(named: "Punch")!
+    
     var side: Side = .left {
         didSet {
             if side == .left {
                 xScale = 1
                 position.x = 70
+                run(punch)
             } else {
                 xScale = -1
                 position.x = 252
+                run(punch)
             }
         }
     }

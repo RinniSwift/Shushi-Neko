@@ -16,17 +16,41 @@ class GameScene: SKScene {
     
     var sushiBasePiece: SushiPiece!
     var sushiTower: [SushiPiece] = []
+    var character: Character!
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
         sushiBasePiece = childNode(withName: "sushiBasePiece") as! SushiPiece
         sushiBasePiece.connectChopsticks()
+        character = childNode(withName: "character") as! Character
         
         addTowerPiece(side: .none)
         addTowerPiece(side: .left)
         
         addRandomPieces(total: 10)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // called when only a single touch begins
+        let touch = touches.first!
+        // get the touch position
+        let location = touch.location(in: self)
+        //locate which half of the screen was touched
+        if location.x > size.width / 2 {
+            character.side = .right
+        } else {
+            character.side = .left
+        }
+        if let firstPiece = sushiTower.first as SushiPiece? {
+            sushiTower.removeFirst()
+            firstPiece.removeFromParent()
+            addRandomPieces(total: 1)
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        moveTowerDown()
     }
     
     func addTowerPiece(side: Side) {
@@ -56,6 +80,8 @@ class GameScene: SKScene {
         sushiTower.append(newPiece)
     }
     
+    
+    
     func addRandomPieces(total: Int) {
         for _ in 1...total {
             // access the last piece properties
@@ -76,6 +102,15 @@ class GameScene: SKScene {
                     addTowerPiece(side: .none)
                 }
             }
+        }
+    }
+    
+    func moveTowerDown() {
+        var n: CGFloat = 0
+        for piece in sushiTower {
+            let y = (n * 55) + 215
+            piece.position.y -= (piece.position.y - y) * 0.5
+            n += 1
         }
     }
     
