@@ -44,7 +44,7 @@ class GameScene: SKScene {
         }
         if let firstPiece = sushiTower.first as SushiPiece? {
             sushiTower.removeFirst()
-            firstPiece.removeFromParent()
+            firstPiece.flip(character.side)
             addRandomPieces(total: 1)
         }
     }

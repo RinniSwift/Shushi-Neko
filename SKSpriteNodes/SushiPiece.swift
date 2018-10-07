@@ -45,4 +45,17 @@ class SushiPiece: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
+    func flip(_ side: Side) {
+        var actionName: String = ""
+        if side == .left {
+            actionName = "FlipRight"
+        } else if side == .right {
+            actionName = "FlipLeft"
+        }
+        let flip = SKAction(named: actionName)!
+        let remove = SKAction.removeFromParent()
+        let sequence = SKAction.sequence([flip, remove])
+        run(sequence)
+    }
 }
